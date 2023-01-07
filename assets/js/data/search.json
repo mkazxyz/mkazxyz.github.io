@@ -1,0 +1,89 @@
+[
+  
+  {
+    "title": "Graphapipermsforserviceid",
+    "url": "/posts/GraphAPIPermsforServiceId/",
+    "categories": "",
+    "tags": "",
+    "date": "2023-01-04 00:00:00 +1100",
+    
+
+
+
+
+
+    
+    "snippet": "Set Graph API permission on Azure Managed IdentityAn Azure managed identity is a Azure assigned and managed identity that can be used to access resources.This allows you to eliminate the need to st...",
+    "content": "Set Graph API permission on Azure Managed IdentityAn Azure managed identity is a Azure assigned and managed identity that can be used to access resources.This allows you to eliminate the need to store secrets or credentials in your code or in your configuration files. Managed identities make it easier to secure your applications and resources in Azure, as you don’t have to worry about managing the secrets and credentials used to authenticate to those resources.Viewing the Managed IdentitiesYou can navigate to the Managed Identities in your tenant by Enterprise applications blade on the Azure AD portal and filtering the application type to ‘Managed Identities’.Adding permissions for the Managed IdentitiesAs you can see there is no options avaliable to add permissions to the Managed Identity via the Azure Portal. This will need to be done via PowerShell.In this blog, we will see how to grant graph API permission to the Managed Identity object.Note:To provide Graph API Permission you need to be Global Administrator in Azure Active Directory.List of supported Azure services that can use managed identities is found [here](https://learn.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/managed-identities-status).Getting the Graph API Role ID$GraphApp = Get-MgServicePrincipal -Filter \"AppId eq '00000003-0000-0000-c000-000000000000'\" # Microsoft Graph$AppRole = $GraphApp.AppRoles | Where-Object {$_.Value -eq  'ServiceHealth.Read.All'}Putting it all together$TenantId = \"&lt;your_tenant_ID&gt;\"$MsiName = \"MSI\" # Name of system-assigned or user-assigned managed service identity.# Graph API permissions to set$gPermissions = @(  \"Directory.ReadWrite.All\"  \"Group.ReadWrite.All\")Connect-AzureAD -TenantId $TenantId# get the list of Graph API role IDs$GraphApp = Get-MgServicePrincipal -Filter \"AppId eq '00000003-0000-0000-c000-000000000000'\" # Microsoft Graph$AppRoles = $GraphApp.AppRole | Where-Object {($_.Value -in $gPermissions) -and ($_.AllowedMemberType -contains \"Application\")}$Msi = Get-AzADServicePrincipal -Filter \"displayName eq '$MsiName'\"foreach($AppRole in $AppRoles){    New-AzureAdServiceAppRoleAssignment `      -ObjectId $Msi.Id `      -PrincipalId $Msi.Id `      -ResourceId $GraphServicePrincipal.Id `      -Id $AppRole.Id `      -Verbose}Once the Powershell comands are executed, you will be able to see the Graph API permission added to system-assigned or user-assigned managed service identity.### Removing permissions for the Managed IdentitiesTo remove an assigned permission, you can use the Remove-MgServicePrincipalAppRoleAssignment cmdlet and specify the identifier of the permission assignment.In this example, the permission being removed is the ServiceHealth.Read.All permission. To do this, you will need to find the identifier for the assignment of this permission and use it as an argument for the cmdlet.$GraphApp = Get-MgServicePrincipal -Filter \"AppId eq '00000003-0000-0000-c000-000000000000'\" # Microsoft Graph$AppRole = $GraphApp.AppRoles | Where-Object {$_.Value -eq  'ServiceHealth.Read.All'}$sp = Get-AzADServicePrincipal -DisplayName &lt;display name&gt;Remove-MgServicePrincipalAppRoleAssignment -ObjectId $sp.ObjectId -Id &lt;app role ID&gt;You can also use the -All parameter to remove all app role assignments from the service principal:Remove-MgServicePrincipalAppRoleAssignment -ObjectId $sp.ObjectId -All"
+  },
+  
+  {
+    "title": "Mgusermail ",
+    "url": "/posts/MgUserMail/",
+    "categories": "",
+    "tags": "",
+    "date": "2023-01-03 00:00:00 +1100",
+    
+
+
+
+
+
+    
+    "snippet": "Using Send-MgUserMailYou can send emails via PowerShell using the Send=MgUserMail cmdlet.Note this is intended for use with an Exchange Online account. It will not work with a local Exchange instal...",
+    "content": "Using Send-MgUserMailYou can send emails via PowerShell using the Send=MgUserMail cmdlet.Note this is intended for use with an Exchange Online account. It will not work with a local Exchange installation or any other email hosting service.PrerequisitesInstalling the modulesInstall-Module Microsoft.Graph.AuthenticationInstall-Module Microsoft.Graph.Users.ActionsGraph API PermissionsIn this example we will be sending the email via a registered Azure AD application.The Azure AD app will require the Mail.Send Graph permission.Creating the messageComposing a basic message$params = @{    $Message = @{        Subject = \"Hello World from GraphAPI\"        Body = @{            ContentType = \"HTML\"            Content = $msgBody #content in HTML format        }        ToRecipients = @(             @{                EmailAddress = @{                Address = \"reciepient@domain.com\"                }            }        )    }}If you want to including CC, Bcc. add the following within the message body:CcRecipients = @(    @{        EmailAddress = @{            Address = \"user2@powershellcenter.com\"        }    })BccRecipients = @(    @{        EmailAddress = @{            Address = \"Bcc@powerShellcenter.com\"        }    })Composing a message with an attachmentFirst we need to encode the attachement in Base64# path to attachement$msgAttachment = \"C:\\Temp\\attachment.csv\"# encoding the attachment content$EncodedAttachmentFile = [Convert]::ToBase64String([IO.File]::ReadAllBytes($msgAttachment))$MsgAttachmentObj = @{    \"@odata.type\" = \"#microsoft.graph.fileAttachment\"    Name = ($msgAttachment -split '\\\\')[-1]    ContentType = \"text/plain\"    ContentBytes = $EncodedAttachmentFile}Now we can compose the message with the encoded attachement# Set the properties of the email message$params = @{    $Message = @{        Subject = \"Hello World from GraphAPI\"        Body = @{            ContentType = \"HTML\"            Content = $msgBody #content in HTML format            }        ToRecipients = @(            @{                EmailAddress = @{                    Address = \"reciepient@domain.com\"                }            }        )        Attachments = @(            $MsgAttachmentObj        )    }}Connecting to Microsoft Graph$TenantId = \"YOUR_TENANT_ID\"$ClientId = \"YOUR_CLIENT_ID\"$Certificate = Get-Item \"Cert:\\CurrentUser\\My\\YOUR_CERT\"Connect-MgGraph -TenantId $TenantId -ClientId $ClientId -CertificateThumbprint $Certificate.ThumbprintSending the Email MessageSend-MgUserMail -UserId 'Sender@sender_domain.com' -BodyParameter $params"
+  },
+  
+  {
+    "title": "Selfsignedcert",
+    "url": "/posts/SelfSignedCert/",
+    "categories": "",
+    "tags": "",
+    "date": "2023-01-02 00:00:00 +1100",
+    
+
+
+
+
+
+    
+    "snippet": "Creating a self-signed certificateAzure AD supports two types of authentication for service principals: password-based authentication (app secret) and certificate-based authentication.App secrets c...",
+    "content": "Creating a self-signed certificateAzure AD supports two types of authentication for service principals: password-based authentication (app secret) and certificate-based authentication.App secrets can be easily created in the Azure portal or using a Microsoft API like Microsoft Graph, but they are not as secure as certificates and have a longer lifespan. It is recommended to use a certificate for your application instead of a secret for enhanced security.Method 1: Using PowerShellIn an elevated PowerShell prompt, run the following commands:$certname = \"&lt;myCert&gt;\"    ## Replace &lt;myCert&gt; with your desired certificate name$cert = New-SelfSignedCertificate -Subject \"CN=$certname\" -CertStoreLocation \"Cert:\\CurrentUser\\My\" -KeyExportPolicy Exportable -KeySpec Signature -KeyLength 2048 -KeyAlgorithm RSA -HashAlgorithm SHA256The $cert variable stores the certificate in the current session which you can export, using the next command:Export-Certificate -Cert $cert -FilePath \"C:\\Users\\admin\\Desktop\\$certname.cer\"   ## Specify your preferred locationNote the command exports the certificate in .cer format. You can also export it in other formats including .pem and .crt.To use the certificate on the cloud, such as Azure Automation you will need to export the private key, this can be done by:$mypwd = ConvertTo-SecureString -String \"&lt;myPassword&gt;\" -Force -AsPlainText  ## Replace {myPassword} with the password you want to secure this certificateExport-PfxCertificate -Cert $cert -FilePath \"C:\\Users\\admin\\Desktop\\$certname.pfx\" -Password $mypwd   ## Specify your preferred locationThe exported certificate (.cer file) can be uploaded to the cloud service (e.g. Azure). The private key (.pfx file) is encrypted with your selected password.After uploading, retrieve the certificate thumbprint, which can be used to authenticate your application.Method 2: Using opensslYour machine will need to be running OpenSSL.Open a terminal and navigate to the directory where you want to store your certificate and private key.Use the following command to create a private key:openssl genrsa -out mykey.key 2048Use the following command to create a self-signed certificate:openssl req -new -x509 -key mykey.key -out mycert.crt -days 365To create a PKCS#12 (also known as PFX) file from a private key and a self-signed certificate, you can use the following command:openssl pkcs12 -export -out certificate.pfx -inkey mykey.key -in mycert.crtThis command will create a PKCS#12 file called certificate.pfx that contains both the private key and the self-signed certificate. You will be prompted to enter a password to protect the file.You can then use the certificate.pfx file to secure your website or other services.Note: Self-signed certificates are not trusted by default in web browsers and operating systems. If you want to use a certificate that is trusted by default, you will need to purchase one from a certificate authority (CA)."
+  },
+  
+  {
+    "title": "Graphapitoken",
+    "url": "/posts/GraphApiToken/",
+    "categories": "",
+    "tags": "",
+    "date": "2023-01-02 00:00:00 +1100",
+    
+
+
+
+
+
+    
+    "snippet": "GraphAPI Access Token via MSAL PowerShellTo obtain an access token using MSAL PowerShell, you will need to first install the MSAL.PS module from the PowerShell Gallery.Install-Module -Name MSAL.PSO...",
+    "content": "GraphAPI Access Token via MSAL PowerShellTo obtain an access token using MSAL PowerShell, you will need to first install the MSAL.PS module from the PowerShell Gallery.Install-Module -Name MSAL.PSOnce the module is installed, you can use the Get-MsalToken cmdlet to obtain an access token for a specific resource.To obtain Graph API token via user credentials:$clientId = \"your-client-id\"$tenantId = \"your-tenant-id\"$resourceId = \"https://graph.microsoft.com\"$credential = Get-Credential$token = Get-MsalToken -ClientId $clientId -TenantId $tenantId -ResourceId $resourceId -Credential $credentialTo obtain Graph API token via certificate:$clientId = \"your-client-id\"$tenantId = \"your-tenant-id\"$resourceId = \"https://graph.microsoft.com\"$clientCertificate =  Get-Item \"Cert:\\CurrentUser\\My\\YOUR_CERT\"$token = Get-MsalToken -ClientId $clientId -TenantId $tenantId -ResourceId $resourceId -ClientCertificate $clientCertificateThe $token variable will contain the access token, which you can then use to make authenticated requests to the Graph API.It’s important to note that the Get-MsalToken cmdlet will only work if you have already registered your application in Azure AD and granted it the necessary permissions to access the desired resource."
+  },
+  
+  {
+    "title": "Jiraviapowershell",
+    "url": "/posts/JIRAviaPowershell/",
+    "categories": "",
+    "tags": "",
+    "date": "2023-01-01 00:00:00 +1100",
+    
+
+
+
+
+
+    
+    "snippet": "Connecting to Jira via PowerShellMethod 1: Using JIRA REST APIHere is an example of how you can use the “Invoke-RestMethod” cmdlet to authenticate to JIRA and retrieve a list of issues for a projec...",
+    "content": "Connecting to Jira via PowerShellMethod 1: Using JIRA REST APIHere is an example of how you can use the “Invoke-RestMethod” cmdlet to authenticate to JIRA and retrieve a list of issues for a project:# Set your JIRA username and password$Username = \"your_username\"$Password = \"your_password\" #this needs to be the Atlassian API tokey# Set the basic authentication header$base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes((\"{0}:{1}\" -f $username, $password)))$headers = @{Authorization = (\"Basic {0}\" -f $base64AuthInfo) }# Set the URL of your JIRA instance$JiraUrl = \"https://your_jira_instance.atlassian.net/rest/api/2/search\"# Set the project key and issue type for the issues you want to retrieve$ProjectKey = \"YOUR_PROJECT_KEY\"$IssueType = \"Bug\"# Build the REST API body for searching for issues$searchParams = @{jql = \"Project = '$ProjectKey' AND 'Request Type' = '$IssueType'\" }# Authenticate to JIRA and search for issues$Response = Invoke-RestMethod -Uri $SearchUrl -Method Get -Headers $headers -Body $searchParams -ContentType \"application/json\"# Print the list of issues$Response.issues | Format-Table -Property key, summaryFor more information on Jira REST API and how to use it, you can consult the documentation at the following URL:https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/Method 2: Using JiraPSJiraPS is a PowerShell module that allows you to interact with the JIRA REST API from within PowerShell. It provides a set of cmdlets that allow you to perform various operations on JIRA, such as creating and updating issues, transitioning issues through a workflow, and managing users and groups.To use JiraPS, you will need to install the module on your machine and then import it into your PowerShell session. You can install JiraPS from the PowerShell Gallery using the following command:Install-Module JiraPSOnce the module is installed, you can import it into your PowerShell session using the following command:Import-Module JiraPSAfter importing the module, you can use the cmdlets provided by JiraPS to perform various operations on JIRA. For example, you can use the “New-JiraSession” cmdlet to authenticate to your JIRA instance and the “Get-JiraIssue” cmdlet to retrieve details on an issue.$username = 'your_username'$password = ConvertTo-SecureString -String 'your_password' -AsPlainText -Force$credentials = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $passwordSet-JiraConfigServer 'https://your_jira_instance.atlassian.net'New-JiraSession -Credential $credentialsGet-JiraIssue -Key JSM-1For more information on JiraPS and how to use it, you can consult the documentation at the following URL:https://atlassianps.org/docs/JiraPS/"
+  }
+  
+]
+
