@@ -1,0 +1,221 @@
+
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>http://localhost:4000/</id>
+  <title>Chirpy</title>
+  <subtitle>A minimal, responsive, and powerful Jekyll theme for presenting professional writing.</subtitle>
+  <updated>2023-01-07T13:51:26+11:00</updated>
+  <author>
+    <name>your_full_name</name>
+    <uri>http://localhost:4000/</uri>
+  </author>
+  <link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml"/>
+  <link rel="alternate" type="text/html" hreflang="en"
+    href="http://localhost:4000/"/>
+  <generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator>
+  <rights> © 2023 your_full_name </rights>
+  <icon>/assets/img/favicons/favicon.ico</icon>
+  <logo>/assets/img/favicons/favicon-96x96.png</logo>
+
+
+  
+  <entry>
+    <title>Graphapipermsforserviceid</title>
+    <link href="http://localhost:4000/posts/GraphAPIPermsforServiceId/" rel="alternate" type="text/html" title="Graphapipermsforserviceid" />
+    <published>2023-01-04T00:00:00+11:00</published>
+  
+    <updated>2023-01-04T00:00:00+11:00</updated>
+  
+    <id>http://localhost:4000/posts/GraphAPIPermsforServiceId/</id>
+    <content src="http://localhost:4000/posts/GraphAPIPermsforServiceId/" />
+    <author>
+      <name>your_full_name</name>
+    </author>
+
+  
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Set Graph API permission on Azure Managed Identity
+
+An Azure managed identity is a Azure assigned and managed identity that can be used to access resources.
+
+This allows you to eliminate the need to store secrets or credentials in your code or in your configuration files. Managed identities make it easier to secure your applications and resources in Azure, as you don’t have to worry about manag...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>Mgusermail </title>
+    <link href="http://localhost:4000/posts/MgUserMail/" rel="alternate" type="text/html" title="Mgusermail " />
+    <published>2023-01-03T00:00:00+11:00</published>
+  
+    <updated>2023-01-03T00:00:00+11:00</updated>
+  
+    <id>http://localhost:4000/posts/MgUserMail/</id>
+    <content src="http://localhost:4000/posts/MgUserMail/" />
+    <author>
+      <name>your_full_name</name>
+    </author>
+
+  
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Using Send-MgUserMail
+You can send emails via PowerShell using the Send=MgUserMail cmdlet.
+
+Note this is intended for use with an Exchange Online account. It will not work with a local Exchange installation or any other email hosting service.
+
+Prerequisites
+Installing the modules
+Install-Module Microsoft.Graph.Authentication
+Install-Module Microsoft.Graph.Users.Actions
+
+
+Graph API Permissions
+I...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>Selfsignedcert</title>
+    <link href="http://localhost:4000/posts/SelfSignedCert/" rel="alternate" type="text/html" title="Selfsignedcert" />
+    <published>2023-01-02T00:00:00+11:00</published>
+  
+    <updated>2023-01-02T00:00:00+11:00</updated>
+  
+    <id>http://localhost:4000/posts/SelfSignedCert/</id>
+    <content src="http://localhost:4000/posts/SelfSignedCert/" />
+    <author>
+      <name>your_full_name</name>
+    </author>
+
+  
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Creating a self-signed certificate
+
+Azure AD supports two types of authentication for service principals: password-based authentication (app secret) and certificate-based authentication.
+
+App secrets can be easily created in the Azure portal or using a Microsoft API like Microsoft Graph, but they are not as secure as certificates and have a longer lifespan. It is recommended to use a certificat...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>Graphapitoken</title>
+    <link href="http://localhost:4000/posts/GraphApiToken/" rel="alternate" type="text/html" title="Graphapitoken" />
+    <published>2023-01-02T00:00:00+11:00</published>
+  
+    <updated>2023-01-02T00:00:00+11:00</updated>
+  
+    <id>http://localhost:4000/posts/GraphApiToken/</id>
+    <content src="http://localhost:4000/posts/GraphApiToken/" />
+    <author>
+      <name>your_full_name</name>
+    </author>
+
+  
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      GraphAPI Access Token via MSAL PowerShell
+
+To obtain an access token using MSAL PowerShell, you will need to first install the MSAL.PS module from the PowerShell Gallery.
+
+Install-Module -Name MSAL.PS
+
+Once the module is installed, you can use the Get-MsalToken cmdlet to obtain an access token for a specific resource.
+
+To obtain Graph API token via user credentials:
+$clientId = "your-client-id"...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>Jiraviapowershell</title>
+    <link href="http://localhost:4000/posts/JIRAviaPowershell/" rel="alternate" type="text/html" title="Jiraviapowershell" />
+    <published>2023-01-01T00:00:00+11:00</published>
+  
+    <updated>2023-01-01T00:00:00+11:00</updated>
+  
+    <id>http://localhost:4000/posts/JIRAviaPowershell/</id>
+    <content src="http://localhost:4000/posts/JIRAviaPowershell/" />
+    <author>
+      <name>your_full_name</name>
+    </author>
+
+  
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Connecting to Jira via PowerShell
+
+Method 1: Using JIRA REST API
+Here is an example of how you can use the “Invoke-RestMethod” cmdlet to authenticate to JIRA and retrieve a list of issues for a project:
+# Set your JIRA username and password
+$Username = "your_username"
+$Password = "your_password" #this needs to be the Atlassian API tokey
+
+# Set the basic authentication header
+$base64AuthInfo = [...
+    </summary>
+  
+
+  </entry>
+
+</feed>
+
+
